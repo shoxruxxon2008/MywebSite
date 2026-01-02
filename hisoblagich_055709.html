@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Istig'for Hisoblagichi</title>
+    <style>
+        /* CSS Qismi */
+        :root {
+            --primary-color: #28a745; /* Yashil */
+            --secondary-color: #17a2b8; /* Moviy */
+            --background-color: #f8f9fa; /* Ochiq kulrang */
+            --card-background: #ffffff;
+            --text-color: #343a40;
+            --font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-background);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        /* Hisob ko'rsatish joyi */
+        .counter-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            padding: 10px 0;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        /* Tugmalar uchun umumiy uslub */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            width: calc(50% - 20px); /* Ikkita tugma yonma-yon turishi uchun */
+            box-sizing: border-box;
+        }
+
+        /* Istig'for aytish tugmasi */
+        #incrementBtn {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        #incrementBtn:hover {
+            background-color: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        /* Qaytarish tugmasi */
+        #resetBtn {
+            background-color: #dc3545; /* Qizil */
+            color: white;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
+
+        #resetBtn:hover {
+            background-color: #bd2130;
+            transform: translateY(-2px);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Foydali ma'lumot */
+        .info {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+            padding-top: 15px;
+        }
+
+        .info p {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🤲 Istig'for Aytish Hisoblagichi</h1>
+
+        <div class="counter-display" id="counter">0</div>
+
+        <div class="actions">
+            <button class="btn" id="incrementBtn" onclick="increment()">
+                Istig'for Aytildi
+            </button>
+
+            <button class="btn" id="resetBtn" onclick="reset()">
+                Hisobni Tozalash
+            </button>
+        </div>
+
+        <div class="info">
+            <p>Hisob avtomatik tarzda brauzeringizda saqlanadi.</p>
+            <p><i>Astaghfirullah, Astaghfirullah, Astaghfirullah...</i></p>
+        </div>
+    </div>
+
+    <script>
+        // Xotiradan hisobni saqlash uchun kalit
+        const STORAGE_KEY = 'istigforCount';
+        let count = 0;
+        const counterElement = document.getElementById('counter');
+
+        /**
+         * 1. Yuklash funksiyasi: Sahifa ochilganda hisobni xotiradan yuklaydi.
+         */
+        function loadCount() {
+            const savedCount = localStorage.getItem(STORAGE_KEY);
+            if (savedCount !== null) {
+                count = parseInt(savedCount, 10);
+            }
+            updateDisplay();
+        }
+
+        /**
+         * 2. Ko'rsatish funksiyasi: Ekrandagi hisobni yangilaydi.
+         */
+        function updateDisplay() {
+            counterElement.textContent = count.toLocaleString('uz-UZ'); // Raqamlarni chiroyli formatda ko'rsatish
+        }
+
+        /**
+         * 3. Saqlash funksiyasi: Hisobni brauzerning mahalliy xotirasiga saqlaydi.
+         */
+        function saveCount() {
+            localStorage.setItem(STORAGE_KEY, count.toString());
+        }
+
+        /**
+         * 4. Oshirish funksiyasi: Hisobni 1 taga oshiradi.
+         */
+        function increment() {
+            count++;
+            updateDisplay();
+            saveCount();
+            
+            // Tugma bosilganda qisqa muddatli vizual effekt (op-ketish)
+            counterElement.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                counterElement.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        /**
+         * 5. Tozalash funksiyasi: Hisobni nolga qaytaradi.
+         */
+        function reset() {
+            if (confirm("Haqiqatan ham hisobni nolga qaytarishni xohlaysizmi?")) {
+                count = 0;
+                updateDisplay();
+                saveCount();
+                alert("Hisob muvaffaqiyatli tozalandi!");
+            }
+        }
+
+        // Sahifa to'liq yuklanganda ishga tushirish
+        window.onload = loadCount;
+
+    </script>
+
+</body>
+</html>
